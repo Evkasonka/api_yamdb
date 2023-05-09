@@ -92,9 +92,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 
-LANGUAGE_CODE = 'Ru-ru'
+LANGUAGE_CODE = 'ru-Ru'
 
-TIME_ZONE = 'ru-Ru'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
