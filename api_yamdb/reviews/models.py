@@ -1,14 +1,85 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth import get_user_model
+# from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 
+User = get_user_model()
 
-class User(AbstractUser):
-    pass
+
+class Genre(models.Model):
+    """Жанр произведения"""
+    name = models.CharField(
+        max_length=256,
+        verbose_name='Жанр произведения',
+        help_text='Жанр произведения'
+    )
+    slug = models.SlugField(
+        max_length=50,
+        unique=True,
+        verbose_name='Slug для URL',
+        help_text='Короткое имя для URL'
+    )
+
+    def __str__(self):
+        return self.slug
+
+
+class Category(models.Model):
+    """Категории произведений"""
+
+    name = models.CharField(
+        max_length=256,
+        verbose_name='Категория произведения',
+        help_text='Категория произведения'
+    )
+    slug = models.SlugField(
+        max_length=50,
+        unique=True,
+        verbose_name='Slug для URL',
+        help_text='Короткое имя для URL'
+    )
+
+    def __str__(self):
+        return self.slug
 
 
 class Title(models.Model):
-    pass
+    """Название произведения"""
+
+    name = models.CharField(
+        max_length=256,
+        verbose_name='Название произведения',
+        help_text='Название произведения'
+    )
+    description = models.TextField(
+        verbose_name='Описание',
+        help_text='добавьте описание'
+    )
+    year = models.IntegerField(
+        verbose_name='Год выпуска',
+        help_text='укажите год выпуска'
+    )
+    genre = models.ManyToManyField(
+        Genre,
+        blank=True,
+        verbose_name='Жанр произведения',
+        help_text='укажите жанр произведения',
+        related_name='titles',
+    )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        verbose_name='Категория произведения',
+        help_text='укажите категорию произведения',
+    )
+
+    class Meta:
+        ordering = ('name',)
+
+    def __str__(self):
+        return self.name
 
 
 class Review(models.Model):

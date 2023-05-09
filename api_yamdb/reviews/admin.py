@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Review, Comment
+from .models import Category, Genre, Review, Comment, Title
 
 
 class ReviewAdmin(admin.ModelAdmin):
@@ -41,6 +41,46 @@ class CommentAdmin(admin.ModelAdmin):
     empty_value_display = "-пусто-"
 
 
+class GenreAdmin(admin.ModelAdmin):
+    """Поля в Admin панели к жанрам произведения"""
+    list_display = ('id',
+                    'name',
+                    'slug',
+                    )
+    list_filter = ('name',)
+    search_fields = ('name',)
+    empty_value_display = '-пусто-'
+
+
+class CategoryAdmin(admin.ModelAdmin):
+    """Поля в Admin панели к категориям произведения"""
+    list_display = ('id',
+                    'name',
+                    'slug',
+                    )
+    list_filter = ('name',)
+    search_fields = ('name',)
+    empty_value_display = '-пусто-'
+
+
+class TitleAdmin(admin.ModelAdmin):
+    """Поля в Admin панели к названию произведения"""
+    list_display = ('id',
+                    'name',
+                    'description',
+                    'year',
+                    'category',
+                    )
+    list_filter = ('name',
+                   'year',
+                   'category',
+                   )
+    search_fields = ('name',
+                     'description',
+                     )
+    empty_value_display = '-пусто-'
+
+
 admin.site.register(
     Review,
     ReviewAdmin,
@@ -49,3 +89,6 @@ admin.site.register(
     Comment,
     CommentAdmin,
 )
+admin.site.register(Category, CategoryAdmin)
+admin.site.register(Genre, GenreAdmin)
+admin.site.register(Title, TitleAdmin)
