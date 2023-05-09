@@ -1,7 +1,8 @@
 from django.contrib import admin
 
-from .models import Review, Comment
+from .models import User, Review, Comment
 
+admin.site.register(User)
 
 class ReviewAdmin(admin.ModelAdmin):
     """Поля в Admin панели к отзывам"""
