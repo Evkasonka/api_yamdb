@@ -1,14 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.db import models
-from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator, MinValueValidator
-
-User = get_user_model()
 
 
 class Genre(models.Model):
     """Жанр произведения"""
+
     name = models.CharField(
         max_length=256,
         verbose_name='Жанр произведения',
@@ -39,6 +36,7 @@ class Category(models.Model):
         verbose_name='Slug для URL',
         help_text='Короткое имя для URL'
     )
+
 
 class User(AbstractUser):
 
@@ -94,6 +92,7 @@ class User(AbstractUser):
 
         def __str__(self):
             return self.username
+
 
 class Title(models.Model):
     """Название произведения"""
