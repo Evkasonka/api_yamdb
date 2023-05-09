@@ -26,7 +26,7 @@ class User(AbstractUser):
         verbose_name='Роль пользователя',
         max_length=10,
         choices=USER_ROLES,
-        default='user',
+        default='USER',
     )
     confirmation_code = models.CharField(
         verbose_name='Токен пользователя',
