@@ -1,12 +1,9 @@
 from django.contrib import admin
 
-<<<<<<< HEAD
-from .models import Category, Genre, Review, Comment, Title
-=======
-from .models import User, Review, Comment
->>>>>>> 195b7f485ac51d552d4bcbdf8b2cc59af8b7c64c
+from .models import Category, Genre, Review, Comment, Title, User
 
 admin.site.register(User)
+
 
 class ReviewAdmin(admin.ModelAdmin):
     """Поля в Admin панели к отзывам"""
