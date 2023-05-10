@@ -8,31 +8,31 @@ class User(AbstractUser):
 
     """Модель создания пользователя."""
 
-    USER = 'user'
-    MODERATOR = 'moderator'
-    ADMIN = 'admin'
+    USER = "user"
+    MODERATOR = "moderator"
+    ADMIN = "admin"
 
     USER_ROLES = [
-        (USER, 'user'),
-        (MODERATOR, 'moderator'),
-        (ADMIN, 'admin'),
+        (USER, "user"),
+        (MODERATOR, "moderator"),
+        (ADMIN, "admin"),
     ]
     email = models.EmailField(
         max_length=254,
         unique=True,
     )
     bio = models.TextField(
-        verbose_name='Биография',
+        verbose_name="Биография",
         blank=True,
     )
     role = models.CharField(
-        verbose_name='Роль пользователя',
+        verbose_name="Роль пользователя",
         max_length=10,
         choices=USER_ROLES,
-        default='USER',
+        default="USER",
     )
     confirmation_code = models.CharField(
-        verbose_name='Токен пользователя',
+        verbose_name="Токен пользователя",
         max_length=100,
         blank=True,
         null=True,
@@ -54,10 +54,11 @@ class User(AbstractUser):
         return self.role == self.USER
 
     class Meta:
-        ordering = ('username',)
+        ordering = ("username",)
 
         def __str__(self):
             return self.username
+
 
 class Title(models.Model):
     pass
