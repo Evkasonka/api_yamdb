@@ -64,9 +64,10 @@ def signup(request):
     confirmation_code = str(uuid.uuid3(uuid.NAMESPACE_DNS, username))
     try:
         user, created = User.objects.get_or_create(
-            **serializer.validated_data,
-            confirmation_code=confirmation_code
+            **serializer.validated_data
         )
+        user.confirmation_code = confirmation_code
+        user.save()
     except Exception as error:
         return Response(
             f'Произошла ошибка ->{error}<-',
