@@ -2,8 +2,9 @@ import uuid
 
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
-from rest_framework import filters, status, viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.filters import SearchFilter
 from rest_framework.permissions import (AllowAny, IsAuthenticated)
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -16,12 +17,13 @@ from .serializers import (SignupSerializer, TokenSerializer, UserSerializer)
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    filter_backends = (filters.SearchFilter,)
+    filter_backends = (SearchFilter,)
     search_fields = ('username',)
     permission_classes = (IsAdmin,)
     serializer_class = UserSerializer
     lookup_field = 'username'
-
+    http_method_names = ['get', 'post', 'patch', 'delete', ]
+        
     @action(
         detail=False,
         methods=['GET', 'PATCH'],
