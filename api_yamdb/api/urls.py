@@ -1,28 +1,26 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-
 from .views import (
-    ReviewViewSet,
-    CommentViewSet,
+    TitleReviewsViewSet,
+    ReviewCommentsViewSet,
 )
 
-
-app_name = "api"
-
-v1_router = DefaultRouter()
-v1_router.register(
-    r"titles/(?P<title_id>\d+)/reviews",
-    ReviewViewSet,
-    basename="reviews",
+router_v1 = DefaultRouter()
+router_v1.register(
+    r'titles/(?P<title_id>\d+)/reviews',
+    TitleReviewsViewSet,
+    basename='title-reviews'
 )
-v1_router.register(
-    r"titles/(?P<title_id>\d+)/reviews/(?P<review_id>\d+)/comments",
-    CommentViewSet,
-    basename="comments",
+router_v1.register(
+    r'titles/(?P<title_id>\d+)/reviews/(?P<review_id>\d+)/comments',
+    ReviewCommentsViewSet,
+    basename='review-comments'
 )
+
+v1_prefix = 'v1/'
 
 urlpatterns = [
-    path("v1/", include("djoser.urls")),
-    path("v1/", include("djoser.urls.jwt")),
-    path("v1/", include(v1_router.urls)),
+    path(v1_prefix, include('djoser.urls')),
+    path(v1_prefix, include('djoser.urls.jwt')),
+    path(v1_prefix, include(router_v1.urls)),
 ]

@@ -1,68 +1,37 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import viewsets
 
-from reviews.models import (
-    Title,
-    Review,
-    Comment,
-)
-from .serializers import (
-    ReviewSerializer,
-    CommentSerializer,
-)
+from reviews.models import Title, Review, Comment
+from .serializers import ReviewSerializer, CommentSerializer
 from .permissions import IsAuthorOrIsStaff
 
 
-class ReviewViewSet(viewsets.ModelViewSet):
+class TitleReviewsViewSet(viewsets.ModelViewSet):
     serializer_class = ReviewSerializer
-    permission_classes = [
-        IsAuthorOrIsStaff,
-    ]
+    permission_classes = [IsAuthorOrIsStaff]
 
     def get_title(self):
-        return get_object_or_404(
-            Title,
-            id=self.kwargs.get("title_id"),
-        )
+        title_id = self.kwargs.get("title_id")
+        return get_object_or_404(Title, id=title_id)
 
     def get_queryset(self):
-        return Review.objects.filter(
-            title=self.get_title(),
-        )
+        return Review.objects.filter(title=self.get_title())
 
     def perform_create(self, serializer):
-        serializer.save(
-            author=self.request.user,
-            title=self.get_title(),
-        )
+        serializer.save(author=self.request.user, title=self.get_title())
 
 
-class CommentViewSet(viewsets.ModelViewSet):
+class ReviewCommentsViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
-    permission_classes = [
-        IsAuthorOrIsStaff,
-    ]
+    permission_classes = [IsAuthorOrIsStaff]
 
     def get_review(self):
-        return get_object_or_404(
-            Review,
-            id=self.kwargs.get("review_id"),
-        )
+        review_id = self.kwargs.get("review_id")
+        return get_object_or_404(Review, id=review_id)
 
     def get_queryset(self):
-        review_id = self.kwargs.get("review_id")
-        title_id = self.kwargs.get("title_id")
-        review = get_object_or_404(
-            Review,
-            id=review_id,
-            title=title_id,
-        )
-        return Comment.objects.filter(
-            review=review,
-        )
+        review = self.get_review()
+        return Comment.objects.filter(review=review)
 
     def perform_create(self, serializer):
-        serializer.save(
-            author=self.request.user,
-            review=self.get_review(),
-        )
+        serializer.save(author=self.request.user, review=self.get_review())
