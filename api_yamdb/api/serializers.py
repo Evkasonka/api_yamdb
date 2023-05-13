@@ -1,6 +1,8 @@
 import datetime
 from rest_framework import serializers
-from reviews.models import Category, Genre, Title
+from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
+from reviews.models import Category, Genre, Title, User
+from reviews.validators import validate_username
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -64,3 +66,44 @@ class TitleSerializer(serializers.ModelSerializer):
         if value not in category:
             raise serializers.ValidationError('Категории не существует')
         return value
+
+      
+class UserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(
+        required=True,
+        max_length=150,
+        validators=[
+            validate_username,
+            UniqueValidator(queryset=User.objects.all())
+        ]
+    )
+
+    class Meta:
+        model = User
+        fields = (
+            'username', 'email', 'first_name', 'last_name', 'bio', 'role'
+        )
+        validators = [
+            UniqueTogetherValidator(
+                queryset=User.objects.all(),
+                fields=['username', 'email']
+            ),
+        ]
+
+
+class SignupSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True, max_length=254)
+    username = serializers.CharField(
+        required=True,
+        max_length=150,
+        validators=[validate_username]
+    )
+
+
+class TokenSerializer(serializers.Serializer):
+    username = serializers.CharField(
+        required=True,
+        max_length=150,
+        validators=[validate_username]
+    )
+    confirmation_code = serializers.CharField(required=True, max_length=150)

@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
 
+from .validators import validate_username
+
 
 class Genre(models.Model):
     """Жанр произведения"""
@@ -47,59 +49,54 @@ class Category(models.Model):
 
 
 class User(AbstractUser):
-
-    """Модель создания пользователя."""
-
     USER = 'user'
-    MODERATOR = 'moderator'
+    MODER = 'moderator'
     ADMIN = 'admin'
-
-    USER_ROLES = [
-        (USER, 'user'),
-        (MODERATOR, 'moderator'),
-        (ADMIN, 'admin'),
+    ROLES = [
+        (USER, 'Аутентифицированный пользователь'),
+        (MODER, 'Модератор'),
+        (ADMIN, 'Администратор'),
     ]
-    email = models.EmailField(
-        max_length=254,
+
+    username = models.CharField(
+        max_length=150,
         unique=True,
-    )
-    bio = models.TextField(
-        verbose_name='Биография',
-        blank=True,
-    )
+        validators=[validate_username])
+    first_name = models.CharField('Имя', max_length=150, blank=True)
+    last_name = models.CharField('Фамилия', max_length=150, blank=True)
+    email = models.EmailField('Почта', unique=True, max_length=254)
+    bio = models.TextField('Биография', blank=True,)
     role = models.CharField(
-        verbose_name='Роль пользователя',
-        max_length=10,
-        choices=USER_ROLES,
-        default='USER',
+        'Роль',
+        max_length=max(len(role) for role, _ in ROLES),
+        choices=ROLES,
+        default=USER
     )
     confirmation_code = models.CharField(
-        verbose_name='Токен пользователя',
-        max_length=100,
+        max_length=150,
         blank=True,
-        null=True,
+        verbose_name='Код для идентификации'
     )
+
+    class Meta:
+        verbose_name = 'Пользователь'
+        verbose_name_plural = 'Пользователи'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['username', 'email'], name='unique_together'
+            )
+        ]
 
     @property
     def is_admin(self):
-        """Проверка пользователя на наличие прав администратора."""
-        return self.role == self.ADMIN or self.is_superuser
+        return (self.role == self.ADMIN or self.is_staff)
 
     @property
     def is_moderator(self):
-        """Проверка пользователя на наличие прав модератора."""
-        return self.role == self.MODERATOR
+        return self.role == self.MODER
 
-    @property
-    def is_user(self):
-        """Проверка пользователя на наличие стандартных прав."""
-        return self.role == self.USER
-
-    class Meta:
-        ordering = ('username',)
-
-        def __str__(self):
-            return self.username
+    def __str__(self):
+        return self.username[:20]
 
 
 class Title(models.Model):
