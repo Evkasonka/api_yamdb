@@ -1,7 +1,6 @@
 import datetime
-from rest_framework import serializers, status
+from rest_framework import serializers
 from reviews.models import Category, Genre, Title
-from requests import Response
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -14,7 +13,7 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['name', 'slug']
-    
+
 
 class CategoryField(serializers.SlugRelatedField):
     def to_representation(self, value):
@@ -29,8 +28,14 @@ class GenreField(serializers.SlugRelatedField):
 
 
 class TitleSerializer(serializers.ModelSerializer):
-    category = CategoryField(slug_field='slug', queryset=Category.objects.all(), required=False)
-    genre = GenreField(slug_field='slug', queryset=Genre.objects.all(), many=True)
+    category = CategoryField(slug_field='slug',
+                             queryset=Category.objects.all(),
+                             required=False
+                             )
+    genre = GenreField(slug_field='slug',
+                       queryset=Genre.objects.all(),
+                       many=True
+                       )
     rating = serializers.FloatField(read_only=True)
 
     class Meta:

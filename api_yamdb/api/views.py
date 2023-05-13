@@ -4,7 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from reviews.models import Category, Genre, Title
 from api.filters import TitleFilter
 from api.mixins import CreateListDestroyMixins
-from api.permissions import IsAdminUserOrReadOnly, CategorySrictGetRequest
+from api.permissions import IsAdminUserOrReadOnly
 from api.serializers import (GenreSerializer,
                              CategorySerializer,
                              TitleSerializer)
@@ -22,7 +22,7 @@ class GenreViewSet(CreateListDestroyMixins):
 class CategoryViewSet(CreateListDestroyMixins):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = (CategorySrictGetRequest, )
+    permission_classes = (IsAdminUserOrReadOnly,)
     lookup_field = 'slug'
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
