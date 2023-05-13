@@ -18,6 +18,10 @@ class Genre(models.Model):
         help_text='Короткое имя для URL'
     )
 
+    class Meta:
+        ordering = ('name',)
+        verbose_name_plural = 'Жанры произведений'
+
     def __str__(self):
         return self.slug
 
@@ -36,6 +40,10 @@ class Category(models.Model):
         verbose_name='Slug для URL',
         help_text='Короткое имя для URL'
     )
+
+    class Meta:
+        ordering = ('name',)
+        verbose_name_plural = 'Категории произведений'
 
 
 class User(AbstractUser):
@@ -95,7 +103,7 @@ class User(AbstractUser):
 
 
 class Title(models.Model):
-    """Название произведения"""
+    """Произведение"""
 
     name = models.CharField(
         max_length=256,
@@ -112,7 +120,6 @@ class Title(models.Model):
     )
     genre = models.ManyToManyField(
         Genre,
-        blank=True,
         verbose_name='Жанр произведения',
         help_text='укажите жанр произведения',
         related_name='titles',
@@ -128,6 +135,7 @@ class Title(models.Model):
 
     class Meta:
         ordering = ('name',)
+        verbose_name_plural = 'Произведения'
 
     def __str__(self):
         return self.name
