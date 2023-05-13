@@ -4,8 +4,8 @@
 #### _Сергей Овчинников_
  - система регистрации и аутентификации
  - права доступа
- - работу с токеном
- - систему подтверждения через e-mail
+ - работа с токеном
+ - система подтверждения через e-mail
 
 #### _Елена Гаврилюк_
 (модели, view и эндпойнты)
@@ -98,12 +98,6 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-Создать миграции:
-
-```
-python manage.py makemigrations reviews
-```
-
 Выполнить миграции:
 
 ```
@@ -121,4 +115,4 @@ python manage.py migrate
 ```
 python manage.py runserver
 ```
-_@ 2023_
+**_@ 2023_**
