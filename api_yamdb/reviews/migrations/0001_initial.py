@@ -2,6 +2,7 @@
 
 from django.conf import settings
 import django.contrib.auth.models
+import django.contrib.auth.validators
 import django.core.validators
 from django.db import migrations, models
 import django.db.models.deletion
@@ -14,6 +15,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('auth', '0012_alter_user_first_name_max_length'),
         ('auth', '0011_update_proxy_permissions'),
     ]
 
@@ -21,6 +23,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='User',
             fields=[
+
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('password', models.CharField(max_length=128, verbose_name='password')),
                 ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
@@ -39,6 +42,7 @@ class Migration(migrations.Migration):
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.Permission', verbose_name='user permissions')),
             ],
             options={
+                'ordering': ('username',),
                 'verbose_name': 'Пользователь',
                 'verbose_name_plural': 'Пользователи',
             },
@@ -49,7 +53,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Category',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(help_text='Категория произведения', max_length=256, verbose_name='Категория произведения')),
                 ('slug', models.SlugField(help_text='Короткое имя для URL', unique=True, verbose_name='Slug для URL')),
             ],
@@ -57,7 +61,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Genre',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(help_text='Жанр произведения', max_length=256, verbose_name='Жанр произведения')),
                 ('slug', models.SlugField(help_text='Короткое имя для URL', unique=True, verbose_name='Slug для URL')),
             ],
@@ -65,11 +69,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Title',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(help_text='Название произведения', max_length=256, verbose_name='Название произведения')),
                 ('description', models.TextField(help_text='добавьте описание', verbose_name='Описание')),
                 ('year', models.IntegerField(help_text='укажите год выпуска', verbose_name='Год выпуска')),
-                ('category', models.ForeignKey(blank=True, help_text='укажите категорию произведения', null=True, on_delete=django.db.models.deletion.SET_NULL, to='reviews.Category', verbose_name='Категория произведения')),
+                ('category', models.ForeignKey(blank=True, help_text='укажите категорию произведения', null=True, on_delete=django.db.models.deletion.SET_NULL, to='reviews.category', verbose_name='Категория произведения')),
                 ('genre', models.ManyToManyField(blank=True, help_text='укажите жанр произведения', related_name='titles', to='reviews.Genre', verbose_name='Жанр произведения')),
             ],
             options={
