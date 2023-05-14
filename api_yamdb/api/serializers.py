@@ -33,7 +33,8 @@ class TitleSerializer(serializers.ModelSerializer):
     category = CategoryField(
         slug_field="slug", queryset=Category.objects.all(), required=False
     )
-    genre = GenreField(slug_field="slug", queryset=Genre.objects.all(), many=True)
+    genre = GenreField(slug_field="slug", queryset=Genre.objects.all(),
+                       many=True)
     rating = serializers.FloatField(read_only=True)
 
     class Meta:
@@ -43,7 +44,8 @@ class TitleSerializer(serializers.ModelSerializer):
     def validate_year(self, value):
         year = datetime.date.today().year
         if year < value:
-            raise serializers.ValidationError("Год не может быть больше текущего")
+            raise serializers.ValidationError(
+                "Год не может быть больше текущего")
         return value
 
     def validate_genre(self, value):
@@ -64,12 +66,15 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
         required=True,
         max_length=150,
-        validators=[validate_username, UniqueValidator(queryset=User.objects.all())],
+        validators=[validate_username,
+                    UniqueValidator(queryset=User.objects.all())],
     )
 
     class Meta:
         model = User
-        fields = ("username", "email", "first_name", "last_name", "bio", "role")
+        fields = (
+            "username", "email", "first_name", "last_name", "bio", "role"
+        )
         validators = [
             UniqueTogetherValidator(
                 queryset=User.objects.all(), fields=["username", "email"]
