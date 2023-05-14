@@ -4,7 +4,6 @@ certifi==2022.5.18.1
 charset-normalizer==2.0.12
 colorama==0.4.4
 Django==2.2.16
-django-filter==21.1
 djangorestframework==3.12.4
 django-filter==23.2
 djoser==2.1.0
