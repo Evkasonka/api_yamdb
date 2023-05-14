@@ -65,7 +65,7 @@ class User(AbstractUser):
     first_name = models.CharField('Имя', max_length=150, blank=True)
     last_name = models.CharField('Фамилия', max_length=150, blank=True)
     email = models.EmailField('Почта', unique=True, max_length=254)
-    bio = models.TextField('Биография', blank=True,)
+    bio = models.TextField('Биография', blank=True, )
     role = models.CharField(
         'Роль',
         max_length=max(len(role) for role, _ in ROLES),
@@ -131,7 +131,6 @@ class Title(models.Model):
     )
 
     class Meta:
-        ordering = ('name',)
         verbose_name_plural = 'Произведения'
 
     def __str__(self):
