@@ -3,18 +3,19 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
 from reviews.models import Category, Genre, Title, User, Review, Comment
 from reviews.validators import validate_username
+from reviews.errors import ErrorMesage
 
 
 class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
-        fields = ["name", "slug"]
+        fields = ("name", "slug")
 
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ["name", "slug"]
+        fields = ("name", "slug")
 
 
 class CategoryField(serializers.SlugRelatedField):
@@ -44,21 +45,7 @@ class TitleSerializer(serializers.ModelSerializer):
     def validate_year(self, value):
         year = datetime.date.today().year
         if year < value:
-            raise serializers.ValidationError(
-                "Год не может быть больше текущего")
-        return value
-
-    def validate_genre(self, value):
-        genre = Genre.objects.all()
-        for item in value:
-            if item not in genre:
-                raise serializers.ValidationError("Жанра не существует")
-        return value
-
-    def validate_category(self, value):
-        category = Category.objects.all()
-        if value not in category:
-            raise serializers.ValidationError("Категории не существует")
+            raise serializers.ValidationError(ErrorMesage.INVALID_YEAR)
         return value
 
 
@@ -115,9 +102,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         author = self.context["request"].user
 
         if Review.objects.filter(author=author, title=title_id).exists():
-            raise serializers.ValidationError(
-                "Можно публиковать только один отзыв на произведение"
-            )
+            raise serializers.ValidationError(ErrorMesage.ONLY_ONE_REVIEW)
 
         return data
 

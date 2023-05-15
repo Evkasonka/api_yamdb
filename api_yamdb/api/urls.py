@@ -8,7 +8,7 @@ from api.views import (
     signup,
     token,
 )
-from .views import (
+from api.views import (
     ReviewViewSet,
     CommentViewSet,
 )
