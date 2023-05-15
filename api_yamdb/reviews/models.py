@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils import timezone
 
-from .validators import validate_username
+from reviews.validators import validate_username
 
 
 class Genre(models.Model):
@@ -22,6 +23,7 @@ class Genre(models.Model):
 
     class Meta:
         ordering = ('name',)
+        verbose_name = 'Жанр произведения'
         verbose_name_plural = 'Жанры произведений'
 
     def __str__(self):
@@ -45,6 +47,7 @@ class Category(models.Model):
 
     class Meta:
         ordering = ('name',)
+        verbose_name = 'Категория произведения'
         verbose_name_plural = 'Категории произведений'
 
 
@@ -111,7 +114,8 @@ class Title(models.Model):
         verbose_name='Описание',
         help_text='добавьте описание'
     )
-    year = models.IntegerField(
+    year = models.PositiveSmallIntegerField(
+        validators=[MaxValueValidator(timezone.now().year)],
         verbose_name='Год выпуска',
         help_text='укажите год выпуска'
     )
@@ -128,9 +132,11 @@ class Title(models.Model):
         null=True,
         verbose_name='Категория произведения',
         help_text='укажите категорию произведения',
+        related_name='titles'
     )
 
     class Meta:
+        verbose_name = 'Произведение'
         verbose_name_plural = 'Произведения'
 
     def __str__(self):
