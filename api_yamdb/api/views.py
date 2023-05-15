@@ -24,7 +24,7 @@ from api.serializers import (
     ReviewSerializer,
     CommentSerializer,
 )
-from api_yamdb.settings import ADMIN_EMAIL
+from api_yamdb.settings import ADMIN_EMAIL, LETTERS_SUBJECT
 
 
 class GenreViewSet(CreateListDestroyMixins):
@@ -125,7 +125,7 @@ def signup(request):
             f"Произошла ошибка ->{error}<-", status=status.HTTP_400_BAD_REQUEST
         )
     send_mail(
-        subject="Код подтверждения",
+        subject=LETTERS_SUBJECT,
         message=f"{user.confirmation_code} - Код для авторизации на сайте",
         from_email=ADMIN_EMAIL,
         recipient_list=[user.email],
