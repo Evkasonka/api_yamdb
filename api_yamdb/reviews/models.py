@@ -144,11 +144,13 @@ class Review(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="reviews",
+        verbose_name='Автор'
     )
     title = models.ForeignKey(
         Title,
         on_delete=models.CASCADE,
         related_name="reviews",
+        verbose_name='Произведение'
     )
     text = models.TextField(
         verbose_name="Текст отзыва",
@@ -190,11 +192,13 @@ class Comment(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="comments",
+        verbose_name='Автор'
     )
     review = models.ForeignKey(
         Review,
         on_delete=models.CASCADE,
         related_name="comments",
+        verbose_name='Отзыв'
     )
     text = models.TextField(
         verbose_name="Текст комментария",
@@ -210,4 +214,4 @@ class Comment(models.Model):
         verbose_name_plural = "Комментарии"
 
     def __str__(self):
-        return self.text
+        return self.text[:15]
