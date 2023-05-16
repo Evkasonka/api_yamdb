@@ -10,7 +10,9 @@ class Genre(models.Model):
     """Жанр произведения"""
 
     name = models.CharField(
-        max_length=256, verbose_name="Жанр произведения", help_text="Жанр произведения"
+        max_length=256,
+        verbose_name="Жанр произведения",
+        help_text="Жанр произведения"
     )
     slug = models.SlugField(
         max_length=50,
