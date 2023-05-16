@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.utils import timezone
 
-from .validators import validate_username
+from reviews.validators import validate_username
 
 
 class Genre(models.Model):
@@ -19,8 +20,9 @@ class Genre(models.Model):
     )
 
     class Meta:
-        ordering = ("name",)
-        verbose_name_plural = "Жанры произведений"
+        ordering = ('name',)
+        verbose_name = 'Жанр произведения'
+        verbose_name_plural = 'Жанры произведений'
 
     def __str__(self):
         return self.slug
@@ -42,8 +44,9 @@ class Category(models.Model):
     )
 
     class Meta:
-        ordering = ("name",)
-        verbose_name_plural = "Категории произведений"
+        ordering = ('name',)
+        verbose_name = 'Категория произведения'
+        verbose_name_plural = 'Категории произведений'
 
 
 class User(AbstractUser):
@@ -108,8 +111,10 @@ class Title(models.Model):
     description = models.TextField(
         verbose_name="Описание", help_text="добавьте описание"
     )
-    year = models.IntegerField(
-        verbose_name="Год выпуска", help_text="укажите год выпуска"
+    year = models.PositiveSmallIntegerField(
+        validators=[MaxValueValidator(timezone.now().year)],
+        verbose_name='Год выпуска',
+        help_text='укажите год выпуска'
     )
     genre = models.ManyToManyField(
         Genre,
@@ -122,12 +127,14 @@ class Title(models.Model):
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        verbose_name="Категория произведения",
-        help_text="укажите категорию произведения",
+        verbose_name='Категория произведения',
+        help_text='укажите категорию произведения',
+        related_name='titles'
     )
 
     class Meta:
-        verbose_name_plural = "Произведения"
+        verbose_name = 'Произведение'
+        verbose_name_plural = 'Произведения'
 
     def __str__(self):
         return self.name
