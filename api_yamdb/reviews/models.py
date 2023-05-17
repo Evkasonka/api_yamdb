@@ -83,11 +83,11 @@ class User(AbstractUser):
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
-                fields=["username", "email"], name="unique_together"
+                fields=("username", "email"), name="unique_together"
             )
-        ]
+        )
 
     @property
     def is_admin(self):
@@ -163,10 +163,10 @@ class Review(models.Model):
         help_text="Текст отзыва",
     )
     score = models.PositiveSmallIntegerField(
-        validators=[
+        validators=(
             MinValueValidator(1),
             MaxValueValidator(10),
-        ],
+        ),
         verbose_name="Рейтинг произведения",
         help_text="Рейтинг произведения",
     )
@@ -177,7 +177,7 @@ class Review(models.Model):
     )
 
     class Meta:
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
                 fields=[
                     "title",
@@ -185,7 +185,7 @@ class Review(models.Model):
                 ],
                 name="unique_title_author",
             )
-        ]
+        )
         ordering = ("-pub_date",)
         verbose_name = "Отзыв"
         verbose_name_plural = "Отзывы"

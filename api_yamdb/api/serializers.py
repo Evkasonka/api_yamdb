@@ -54,8 +54,8 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(
         required=True,
         max_length=150,
-        validators=[validate_username,
-                    UniqueValidator(queryset=User.objects.all())],
+        validators=(validate_username,
+                    UniqueValidator(queryset=User.objects.all()),),
     )
 
     class Meta:
@@ -63,11 +63,11 @@ class UserSerializer(serializers.ModelSerializer):
         fields = (
             "username", "email", "first_name", "last_name", "bio", "role"
         )
-        validators = [
+        validators = (
             UniqueTogetherValidator(
-                queryset=User.objects.all(), fields=["username", "email"]
+                queryset=User.objects.all(), fields=("username", "email")
             ),
-        ]
+        )
 
 
 class SignupSerializer(serializers.Serializer):
@@ -79,7 +79,7 @@ class SignupSerializer(serializers.Serializer):
 
 class TokenSerializer(serializers.Serializer):
     username = serializers.CharField(
-        required=True, max_length=150, validators=[validate_username]
+        required=True, max_length=150, validators=(validate_username,)
     )
     confirmation_code = serializers.CharField(required=True, max_length=150)
 

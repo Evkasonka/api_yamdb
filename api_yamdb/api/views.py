@@ -74,7 +74,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=False,
-        methods=["GET", "PATCH"],
+        methods=("GET", "PATCH"),
         url_path="me",
         permission_classes=(IsAuthenticated,),
         serializer_class=UserSerializer,
@@ -87,8 +87,8 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-@api_view(["POST"])
-@permission_classes([AllowAny])
+@api_view(("POST",))
+@permission_classes((AllowAny,))
 def token(request):
     serializer = TokenSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
@@ -104,8 +104,8 @@ def token(request):
     return Response(token_data, status=status.HTTP_200_OK)
 
 
-@api_view(["POST"])
-@permission_classes([AllowAny])
+@api_view(("POST",))
+@permission_classes((AllowAny,))
 def signup(request):
     serializer = SignupSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
