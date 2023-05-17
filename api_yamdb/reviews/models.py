@@ -1,8 +1,7 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.db import models
 from django.utils import timezone
-
 from reviews.validators import validate_username
 
 
@@ -10,7 +9,9 @@ class Genre(models.Model):
     """Жанр произведения"""
 
     name = models.CharField(
-        max_length=256, verbose_name="Жанр произведения", help_text="Жанр произведения"
+        max_length=256,
+        verbose_name="Жанр произведения",
+        help_text="Жанр произведения"
     )
     slug = models.SlugField(
         max_length=50,
