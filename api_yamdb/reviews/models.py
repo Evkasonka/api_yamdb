@@ -1,7 +1,8 @@
+from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator
-from django.db import models
 from django.utils import timezone
+
 from reviews.validators import validate_username
 
 
@@ -179,10 +180,10 @@ class Review(models.Model):
     class Meta:
         constraints = (
             models.UniqueConstraint(
-                fields=[
+                fields=(
                     "title",
                     "author",
-                ],
+                ),
                 name="unique_title_author",
             )
         )
