@@ -87,7 +87,7 @@ class User(AbstractUser):
         constraints = (
             models.UniqueConstraint(
                 fields=("username", "email"), name="unique_together",
-            )
+            ),
         )
 
     @property
@@ -185,7 +185,7 @@ class Review(models.Model):
                     "author",
                 ),
                 name="unique_title_author",
-            )
+            ),
         )
         ordering = ("-pub_date",)
         verbose_name = "Отзыв"
